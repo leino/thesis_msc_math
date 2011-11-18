@@ -1,0 +1,211 @@
+\subsection{Outline}
+Recall that we have reduced Quillen-Suslin into Suslin's lemma, constructively.
+In the previous section, we proved Suslin's lemma in a constructive way, except for lemma \ref{lemma:suslinconcrete}.
+
+In the previous section, we gave a non-constructive proof for lemma \ref{lemma:suslinconcrete}.
+In this section, we will give a constructive proof which is intended to mimic the non-constructive proof as closely as possible.
+
+All of the constructions here were implemented in the Haskell programming language.
+For the corresponding Haskell code, see Appendix I.
+
+\begin{notation}
+  In this section we use the notation
+  $E_{i,j}(a) = \mathbb{I}_n + a\delta_{i,j} \in \EL_n(R)$ where $i \neq j$, for some $n \geq 2$ and some $a \in R$.
+  Note that $(x_1, \dots, x_n) E_{i,j}(a) = (x_1, \dots, x_{j-1}, x_j + a x_i, x_{j+1}, \dots, x_n)$.
+\end{notation}
+
+We are also going to need the following corollary.
+Note that this is a more general version of lemma \ref{lemma:cosetnorm} from section \ref{subsec:theextension}.
+
+\begin{lemma}
+  Suppose that $a \in R$.
+  Then $N_q(f + ah) - N_q(f) \in \langle a \rangle$ for any $f,h\in R[t]$.
+\end{lemma}
+\begin{proof}
+  In the notation of section \ref{subsec:theextension}, write $M_{f+ah} = M_f + a M_h$ for the matrix of the linear transformation on
+  $R[t]/\langle q \rangle$ corresponding to multiplication by $f + ah$.
+  Now $N_q(f + ah) - N_q(f) = \det (M_f + aM_h) - \det(M_f)$, which is in $\langle a \rangle$.
+  \qed
+\end{proof}
+
+\begin{corollary}\label{cor:idealnorm}
+  Suppose that $I = \langle a_1,\dots,a_m\rangle$ is some finitely generated ideal of $R$.
+  Then given $f,h\in R[t]$ such that $f - h \in I[t]$, we obtain that
+  $N_q(f) - N_q(h) \in I$.
+\end{corollary}
+
+\subsection{Dynamical ideals and induction}
+
+\begin{theorem}\label{thm:dynamicideal}
+  Suppose that for every finitely generated ideal $I \subset R$, we have sets $S_I$ and an ordering $<$ on $S = \{ (s,I) \mid s \in S_I\}$, along with a proposition $B(s,I)$ such that 
+  for any sequence $(s_1, I_1) > (s_2, I_2) \dots$ we eventually obtain $B(s_n,I_n)$ for some $n\geq 1$.
+  We are also given some fixed ideal $L \subset R$ and a map $\varphi : \{ (s,I) \mid (s,I) \in S, \neg B(s,I) \} \rightarrow R$.
+  Suppose that the following holds for every $(s,I) \in S$:
+  \begin{enumerate}
+    \item\label{lbl1}
+    If $B(s,I)$ then we have $1 \in \langle I, L \rangle$
+    \item\label{lbl2} If $\neg B(s,I)$, and if either
+      \begin{enumerate}
+        \item\label{lbl2a}
+          $\varphi(s,I) \in J$
+        \item\label{lbl2b}
+          $1 \in \langle \varphi(s,I), J \rangle$
+      \end{enumerate}
+      for some ideal $J \supset I$, then there is $s' \in S_J$ such that $(s',J) < (s,I)$.
+  \end{enumerate}
+
+  If the above holds, then given $(s,I) \in S$, we can show $1 \in \langle I, L \rangle$.
+\end{theorem}
+\begin{proof}
+   We will proceed by induction, using the ordering $<$ and base cases $(s,I)$ such that $B(s,I)$.
+   By \ref{lbl1}, the base case $B(s,I)$ is trivial.
+   Now suppose that $\neg B(s,I)$.
+   In this case, there is an element $\varphi(s,I)$ satisfying \ref{lbl2}.
+   Since $\varphi(s,I) \in \langle I, \varphi(s,I) \rangle$, we can satisfy \ref{lbl2a}.
+   Therefore we obtain 
+   $s' \in S_{\langle I, \varphi(s,I) \rangle}$ such that $(s',\langle I, \varphi(s,I) \rangle) < (s, I)$.
+
+   We may therefore apply the induction hypothesis to get
+   $1 \in \langle \varphi(s,I), I, L \rangle$.
+
+   This shows that we can satisfy \ref{lbl2b}, so we get $s'' \in S_{\langle I , L \rangle}$ satisfying
+   $(s'',\langle I, L \rangle) < (s,I)$.
+   Therefore we may apply the induction hypothesis again, to get $ 1 \in \langle I, L \rangle $.
+   \qed
+\end{proof}
+
+Note that the above proof is constructive.
+In the next section we will see that we can obtain a constructive proof of lemma \ref{lemma:suslinconcrete} by proving the hypothesis of the above theorem constructively.
+
+\subsection{Finishing the proof}
+
+We now use theorem \ref{thm:dynamicideal} to obtain a constructive proof of lemma \ref{lemma:suslinconcrete}.
+
+\emph{
+  Throughout this section, we will fix $f,g \in R[t]^n$, a monic $q \in R[t]$ and $p \in R[t]$ such that $fg = 1 + qp$.
+}
+
+\begin{remark}
+Note that lemma \ref{lemma:suslinconcrete} is formulated in terms of the unimodular row $(q,f)$.
+We have chosen to take $q$ out of the row since it doesn't figure algorithmically in the non-constructive proof, which we are trying to mimic here.
+\end{remark}
+
+In order to use theorem \ref{thm:dynamicideal} we need to define $S_I$, $<$, $B(s,I)$, $\varphi(S,I)$ and $L$.
+
+We then need to prove the statements \ref{lbl1}, \ref{lbl2}, \ref{lbl2a} and \ref{lbl2b} that
+are part of theorem \ref{thm:dynamicideal}, for our definitions.
+
+\begin{definition}[$S_I$ and $S$]
+Given an ideal $I$, we define $S_I = \EL_n(R[t]) \times I[t]^n$.
+Then $S$ is the set of $(\Gamma,h,I)$ where $(\Gamma,h) \in \EL_n(R[t]) \times I[t]^n$ and $I$ is a finitely generated ideal of $R$.
+\end{definition}
+
+\begin{definition}[$<$ and $B(s,I)$]
+Suppose we are given $(\Gamma,h) \in S_I$.
+Put $f' = f \Gamma - h$.
+We determine the ordering $<$ by comparing the sum $\sum_{i=1, f'_i \neq 0}^n \degree(f'_i)$.
+We define the statement $B(\Gamma, h, I)$ to be true iff $f'$ has at most one non-zero component.
+Note note that for infinite sequences $(s_1, I_1) > (s_2, I_2) > \dots$ we eventually get $B(s_n,I_n)$ for some $n\geq 1$.
+\end{definition}
+
+\begin{definition}[$\varphi$]
+  Given $(\Gamma, h) \in S_I$ such that $\neg B(\Gamma,h,I)$.
+  Put $f' = f \Gamma - h$.
+  Since we assume $\neg B(\Gamma,h,I)$, we may take $\varphi(\Gamma,h,I) = \lc(f'_i)$ where $i$ is such that $\degree f'_i = \min \{\degree f'_j \mid f'_j \neq 0\}$.
+\end{definition}
+
+\begin{definition}[$L$]\label{def:L}
+  We define $L = \langle N_q ((f \Gamma)_1) \mid \Gamma \in \EL_n(R[t]) \rangle$.
+\end{definition}
+
+We will now prove \ref{lbl1}, \ref{lbl2a} and \ref{lbl2b} of theorem \ref{thm:dynamicideal}.
+
+\begin{lemma}[1]
+  Suppose we have $(\Gamma, h) \in S_I$ satisfying $B(\Gamma,h,I)$.
+  Then we have $1 \in \langle I, L \rangle$.
+\end{lemma}
+\begin{proof}
+  Since we have $B(\Gamma,h,I)$, $f' = f \Gamma - h$ has at most one non-zero component.
+  If there is one non-zero component in $f'$, then by an elementary transformation we may assume that this is the first component: $f'_1 \neq 0$ and $f'_i = 0$ for all $i > 1$.
+  In either case, we have
+  \[
+    f'\Gamma^{-1} g = f g - h \Gamma^{-1} g
+  \]
+  \[
+    f'\Gamma^{-1} g = 1 + pq - h \Gamma^{-1} g
+  \]
+  \[
+    f'_1 (\Gamma^{-1} g)_1 = 1 + pq - h \Gamma^{-1} g
+  \]
+  \[
+    N_q(f'_1) N_q((\Gamma^{-1} g)_1) = N_q(1 + h \Gamma^{-1} g)
+  \]
+  Using corollary \ref{cor:idealnorm} on the right hand side, we obtain $1 \in \langle N_q(f'_1) , I \rangle$.
+  We also have $(f \Gamma)_1 - f'_1 = h_1 \in I[t]$ so we again use corollary \ref{cor:idealnorm} to obtain $N_q(f'_1) - N_q((f \Gamma)_1) \in I$. Thus $1 \in \langle I, N_q((f \Gamma)_1) \rangle \subset \langle I ,L \rangle$.
+  \qed
+\end{proof}
+
+\begin{lemma}[2a]
+  Suppose that we have $(\Gamma,h) \in S_I$ such that $\neg B(\Gamma,h, I)$.
+  Suppose also $\varphi(\Gamma,h,I) \in J$ where $I \subset J$.
+  Then we can find $(\Gamma',h') \in S_J$ such that $(\Gamma',h',J) < (\Gamma, h, I)$.
+\end{lemma}
+\begin{proof}
+  Put $f' = f \Gamma - h$ and denote $a = \varphi(\Gamma,h,I)$.
+  We may assume that $a = \lc(f'_1)$, since this is possible to arrange by an elementary transformation.
+  Consider $f'' = f' - \lt(f'_1) = f \Gamma - (h + \lt(f'_1))$.
+  Since $a \in J$ we get $\lt(f'_1) \in J[t]$.
+  Since $I \subset J$ we get $h \in J[t]$.
+  Thus $h' = h + \lt(f'_1) \in J[t]$.
+  Clearly, either $f''_1 < f'_1$ or $f''_1 = 0 \wedge f'_1 \neq 0$ holds.
+  Thus $(\Gamma, h',J) < (\Gamma, h,I)$, where $(\Gamma,h') \in S_J$.
+  \qed
+\end{proof}
+
+\begin{lemma}[2b]
+  Suppose that we have $(\Gamma,h) \in S_I$ such that $\neg B(\Gamma,h, I)$.
+  Suppose also $1 \in \langle  \varphi(\Gamma,h,I), J \rangle$ where $I \subset J$.
+  Then we can find $(\Gamma',h') \in S_J$ with $(\Gamma',h',J) < (\Gamma, h, I)$.
+\end{lemma}
+\begin{proof}
+  Put $f' = f \Gamma - h$ and denote $a = \varphi(\Gamma,h,I)$.
+  As in the proof of the previous lemma, we may assume that $a = \lc (f'_1)$ where $f'_1 \neq 0$.
+  Since $1 \in \langle a,J \rangle$, there is $b \in R$ such that $1-ab \in J$.
+  Define $\Delta = \prod_{1 < i \leq n} E_{1, i}(-b\lc(f'_i)t^{\degree f'_i - \degree f'_1}) \in \EL_n(R[t])$.
+  (Well defined since $\degree f'_1 \leq \degree f'_i$ for all $1\leq i \leq n$.)
+  Clearly, $(f'\Delta)_1 = 0$ and for $1 < j \leq n$, we have
+  \[
+  (f'\Delta)_j = f'_j - ab \lt(f'_j)
+  \]\[
+  (f'\Delta)_j = f'_j - \lt(f'_j) + J[t]
+  \]
+  Thus if we put $f'' = (f'_1, f'_2 - \lt(f'_2), \dots, f'_n - \lt(f'_n))$, there is $h' \in J[t]^n$ such that
+  $f'' = f'\Delta - h'$.
+  But $f'' = f' \Delta - h' = f\Gamma\Delta - (h + h')$.
+  Since $I \subset J$ and since $h \in I[t]^n$, we see that $h \in J[t]^n$, so that $h + h' \in J[t]^n$.
+  Thus $(\Gamma\Delta, h') \in S_J$.
+  Since we have at least one non-zero $f'_j$ for some $j > 1$ we obtain either $f''_j < f'_j$ or $f''_j = 0 \wedge f'_j \neq 0$.
+  Thus $(\Gamma\Delta, h', J) < (\Gamma,h,I)$. 
+  \qed
+\end{proof}
+
+Applying theorem \ref{thm:dynamicideal}, we now obtain a constructive proof of lemma \ref{lemma:suslinconcrete} as a corollary.
+
+\begin{corollary}
+  We have $1 \in L$
+\end{corollary}
+\begin{proof}
+  Apply theorem \ref{thm:dynamicideal} with $(\mathbb{I}_n, (0, \dots, 0)) \in S_{\langle 0 \rangle}$.
+  \qed
+\end{proof}
+
+\subsection{A note about decidability}
+
+The proof in the previous section is constructive, but assumes that equality on $R$ is decidable.
+
+In particular this is assumed when using $<$ to compare elements, and when checking if the base case $B(s,I)$ is satisfied.
+
+It is possible to follow this argument without this decidability hypothesis, in order to obtain the same result for rings $R$ which are not necessarily decidable, thus obtaining a more general result.
+
+For this we consider polynomials in $R[t]$ as sequences of elements in $R$ and we work with the length of this sequence instead of degree of polynomials. If the length of such a sequence is zero, it represents the zero polynomial.
+This is the algorithm we have implemented in Haskell, which realizes lemma \ref{lemma:suslinconcrete} in this way for an arbitrary commutative ring $R$.

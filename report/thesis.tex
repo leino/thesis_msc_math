@@ -1,0 +1,117 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{natbib}
+\usepackage{verbatim}
+\usepackage{enumerate}
+\usepackage[utf8]{inputenc}
+\usepackage[all]{xy}
+\usepackage{fancyvrb}
+\DefineVerbatimEnvironment{code}{Verbatim}{fontsize=\small}
+
+
+\begin{document}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+
+\newenvironment{proof}[1][Proof]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+
+% we want our definitions numbered!
+%\newenvironment{definition}[1][Definition]{\begin{trivlist}
+%\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+
+\newenvironment{notation}[1][Notation]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+
+\newenvironment{example}[1][Example]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+
+\newenvironment{remark}[1][Remark]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% some custom commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\qed}{\nobreak \ifvmode \relax \else      % qed sign used to mark end of proofs
+      \ifdim\lastskip<1.5em \hskip-\lastskip         
+      \hskip1.5em plus0em minus0.5em \fi \nobreak     
+      \vrule height0.75em width0.5em depth0.25em\fi}  
+\newcommand{\GL}{\text{GL}}                           % General linear group
+\newcommand{\SL}{\text{SL}}                           % Special linear group
+\newcommand{\EL}{\text{EL}}                           % Elementary transformations
+\newcommand{\Hom}{\text{Hom}}                         % Hom
+\newcommand{\Um}{\text{Um}}                           % Um
+\newcommand{\isomarrow}{\overset\sim\to}              % isomorphism arrow
+\newcommand{\surjarrow}{\twoheadrightarrow}           % surjection arrow
+\newcommand{\degree}{\deg}                            % degree of a polynomial
+\newcommand{\Res}{\text{Res}}                         % resultant of two polynomials
+\newcommand{\lc}{\text{LC}}                           % leading coefficient
+\newcommand{\lt}{\text{LT}}                           % leading term
+\newcommand{\fg}{\mathfrak M}                         % set of fin. gen. modules
+\newcommand{\fgp}{\mathfrak B}                        % set of fin. gen. proj. modules
+\newcommand{\free}{\mathfrak F}                       % set of free modules
+\newcommand{\stablyfree}{\mathfrak{F}_s}              % set of stably free modules
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%1
+\section{Introduction}
+\label{sec:introduction}
+\input{introduction.tex}
+
+%2
+\section{A Concrete Condition}
+\label{sec:concrete_condition}
+\input{concrete_condition.tex}
+
+%3
+\section{The Case of Euclidean Domains}
+\label{sec:euclideancase}
+\input{euclidean_case.tex}
+
+%4
+\section{A proof of Quillen-Suslin using Suslin's Lemma}
+\label{sec:quillen_suslin_proof}
+\input{quillen_suslin_proof.tex}
+
+%5
+\section{Proving Suslin's Lemma}
+\label{sec:suslins_lemma}
+\input{suslins_lemma.tex}
+
+%6
+\section{Completing the construction}
+\label{sec:lemma611_constructive_proof}
+\input{suslins_lemma_implementation.tex}
+
+%7
+\section{Appendix A}
+\label{sec:appendix_code}
+\input{appendix_code.tex}
+
+%8
+\section{Appendix B}
+\label{sec:appendix_tests}
+\input{appendix_tests.tex}
+
+%9
+\section{Index of notations}
+\label{sec:notation}
+\input{notation.tex}
+
+% bibliography
+% \bibliographystyle{abbrv}
+\bibliographystyle{plainnat}
+\bibliography{simple}
+\input{bibliography.tex}
+
+\end{document}
+

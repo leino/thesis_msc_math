@@ -1,0 +1,403 @@
+\subsection{Outline}
+
+In this section, we will complete the proof of the Quillen-Suslin theorem by giving a proof of Suslin's lemma (lemma \ref{lemma:suslinslemma}).
+The proof given in this section will not be constructive, but we will modify it in a later section in order to obtain a constructive argument.
+
+
+Suslin's Lemma says that, if $f \in \Um_n(R[t])$ then $f(h) \sim f(h')$ for any $h, h' \in R[t]$.
+In the case of Quillen-Suslin, we have $R=k[t_1, \dots, t_m]$ but there is no reason to restrict ourselves to this case.
+
+\begin{notation}
+  $I_{f,G} = \{ c \in R | h - h' \in \langle c \rangle [t] \Rightarrow f(h) \sim_G f(h')\}$ for some subgroup $G$ of $\GL_n(R[t])$.
+  If we drop the $G$ and only write $I_f$ then $G = \GL_n(R[t])$ is implied.
+\end{notation}
+
+Suslin's Lemma then says that $f \in \Um_n(R[t]) \Rightarrow I_f=R$.
+It is a pleasant fact that $I_f$ is an ideal:
+
+\begin{proposition}
+  Let $R$ be some ring, $f \in R[t]^n$ and $G$ some subgroup of $GL_n(R[t])$.
+  Then the set $I_{f,G} = \{ c \in R | g - g' \in \langle c \rangle[t] \Rightarrow f(g) \sim_G f(g') \}$ is an ideal.
+\end{proposition}
+\begin{proof}
+  Suppose $a,b \in I_{f,G}$, and let us show that for any $x,y \in R$ we have $ax + by \in I_{f,G}$.
+  Let $g - g' = (ax+by) h$ for some $h \in R[t]$. Rearrange to obtain $g - axh = g' + byh$.
+  Then we have
+
+  \[
+    f(g) \sim_G f(g-axh) = f(g'+byh) \sim_G f(g')
+  \]
+
+  where we first used $a,b \in I_{f,G}$. Now since $\sim_G$ is an equivalence relation, we have obtained $f(g) \sim_G f(g')$ and so we are done.
+  \qed
+\end{proof}
+
+We will show that $I_f$ contains a unit if $f$ is a unimodular row.
+We will do this by showing that for every maximal ideal $\frak m \subset R$, there exists $c \in I_f - \frak m$.
+Finding this $c$ is the tricky part.
+
+It turns out to be quite easy to prove Suslin's lemma for the cases $n=1,2$.
+The $n=2$ case will also be used in the proof for $n \geq 3$.
+
+\subsection{Suslin's Lemma for $n=1,2$}
+
+We first deal with the case $n=1$.
+Since $f \in \Um_1(R[t])$ simply means that $f$ is invertible, there is some $g \in R[t]$ such that $f(t) g(t) = 1$.
+Given any $h,h' \in R[t]$, we can change variables, and get $f(h) g(h) = 1$ and $f(h') g(h') = 1$.
+Thus $f(h) (g(h) f(h')) = f(h')$. (Note that $g(h) f(h')$ is invertible, as required in Suslin's lemma.)
+
+Now we deal with the case $n=2$.
+
+\begin{lemma}
+\label{lemma:suslinbasecase}
+  Let $R$ be a commutative ring and suppose that $f = (f_1, f_2) \in R[t]^2$.
+  Then $c \in \langle f_1, f_2 \rangle \cap R \Rightarrow c \in I_{f,G}$. (Here $G = \SL_2(R[t])$)
+\end{lemma}
+\begin{proof}
+  We must show that given any $h,h' \in R[t]$ such that $h' = h + c k$ for some $k \in R[t]$, there is a matrix
+  $M \in \SL_2(R[t])$ such that $f(h) M = f(h')$.
+
+  Introduce $\phi(x,y,z)$ and $\psi(x,y,z)$ such that
+
+  \[
+    \begin{matrix}
+      f_i(x + yz) = f_i(x) + z\phi_i(x,y,z)  \\
+      g_i(x + yz) = g_i(x) + z\psi_i(x,y,z)  \\
+    \end{matrix}
+    \text{ for } i = 1,2
+  \]
+
+  Now define
+
+  \[
+    M(x,y,z)
+    =
+    \begin{pmatrix}
+      1 + g_1(x) \phi_1(x,y,z) + f_2(x) \psi_2(x,y,z) & g_1(x) \phi_2(x,y,z) - f_2(x) \psi_1(x,y,z) \\
+      g_2(x) \phi_1(x,y,z) - f_1(x) \psi_2(x,y,z) & 1 + g_2(x) \phi_2(x,y,z) + f_1(x) \psi_1(x,y,z) \\
+    \end{pmatrix}
+  \]
+
+  We claim that $M(h,k,c)$ is the desired matrix.
+  To check this, let us compute $f(x) M(x,y,z)$ and $\det M(x,y,z)$.
+  We suppress arguments to avoid clutter.
+
+  \[
+    f(x) M (x,y,z)
+    =
+    \]\[
+    (f_1, f_2)
+    \begin{pmatrix}
+      1 + g_1 \phi_1 + f_2 \psi_2 & g_1 \phi_2 - f_2 \psi_1 \\
+      g_2 \phi_1 - f_1 \psi_2 & 1 + g_2 \phi_2 + f_1 \psi_1 \\
+    \end{pmatrix}
+    =
+  \]
+  \[
+    =
+    (
+    f_1 + (f_1g_1 + f_2g_2) \phi_1
+    ,
+    f_2 + (f_1g_1 + f_2g_2) \phi_2
+    )
+    =
+  \]
+  \[
+    =
+    (f_1 + c \phi_1, f_2 + c \phi_2)
+  \]
+
+  Evaluating at $(x,y,z) = (h,k,c)$ we get $f(h) M(h,k,c) = f(h+ck) = f(h')$, as desired.
+  Now we compute $\det M(x,y,z)$.
+
+  \[
+    \det M(x,y,z)
+    =
+  \]
+  \[
+    =
+    (1 + g_1 \phi_1 + f_2 \psi_2)(1 + g_2 \phi_2 + f_1 \psi_1) - (g_2 \phi_1 - f_1 \psi_2)(g_1 \phi_2 - f_2 \psi_1)
+    =
+  \]
+  \[
+    =
+    1
+    +
+    g_1 \phi_1 + f_2 \psi_2 + g_2 \phi_2 + f_1 \psi_1
+    + 
+    (g_1 \phi_1 + f_2 \psi_2)(g_2 \phi_2 + f_1 \psi_1)
+    -
+    (g_2 \phi_1 - f_1 \psi_2)(g_1 \phi_2 - f_2 \psi_1)
+    =
+  \]
+  \[
+    =
+    \begin{matrix}
+    1
+    +
+    g_1 \phi_1 + f_2 \psi_2 + g_2 \phi_2 + f_1 \psi_1
+    + 
+    g_1 g_2 \phi_1 \phi_2 + f_1 g_1 \phi_1 \psi_1
+    +
+    f_2 g_2 \phi_2 \psi_2 + f_1 f_2 \psi_1 \psi_2
+    \\
+    -
+    \left[
+      g_1 g_2 \phi_1 \phi_2 - f_2 g_2 \phi_1 \psi_1 - f_1 g_1 \phi_2 \psi_2 + f_1 f_2 \psi_1 \psi_2
+    \right]
+    \end{matrix}
+    =
+  \]
+  \[
+    =
+    \begin{matrix}
+    1
+    +
+    g_1 \phi_1 + f_2 \psi_2 + g_2 \phi_2 + f_1 \psi_1
+    + 
+    g_1 g_2 \phi_1 \phi_2 + f_1 g_1 \phi_1 \psi_1
+    +
+    f_2 g_2 \phi_2 \psi_2 + f_1 f_2 \psi_1 \psi_2
+    \\
+    -g_1 g_2 \phi_1 \phi_2 + f_2 g_2 \phi_1 \psi_1 + f_1 g_1 \phi_2 \psi_2 - f_1 f_2 \psi_1 \psi_2
+    \end{matrix}
+    =
+  \]
+  \[
+    =
+    1
+    +
+    g_1 \phi_1 + f_2 \psi_2 + g_2 \phi_2 + f_1 \psi_1
+    + 
+    f_1 g_1 \phi_1 \psi_1
+    +
+    f_2 g_2 \phi_2 \psi_2
+    +
+    f_2 g_2 \phi_1 \psi_1 + f_1 g_1 \phi_2 \psi_2
+    =
+  \]
+  \[
+    =
+    1
+    +
+    g_1 \phi_1 + f_2 \psi_2 + g_2 \phi_2 + f_1 \psi_1
+    + 
+    (f_1 g_1 + f_2 g_2) \phi_1 \psi_1
+    +
+    (f_1 g_1 + f_2 g_2) \phi_2 \psi_2
+    =
+  \]
+  \[
+    =
+    1
+    +
+    (f_1 \psi_1 + g_1 \phi_1 + c \phi_1 \psi_1)
+    +
+    (f_2 \psi_2 + g_2 \phi_2 + c \phi_2 \psi_2)
+  \]
+
+  Evaluating at $z = c$ we obtain
+  \[
+    \det M(x,y,c)
+    =
+    1 + \xi_1(x,y,c) + \xi_2(x,y,c)
+  \]
+  where
+  $\xi_i(x,y,z) = f_i(x) \psi_i(x,y,z) + g_i(x) \phi_i(x,y,z) + z \phi_i(x,y,z) \psi_i(x,y,z)$.
+  Now note that $z \xi_i(x,y,z) = f_i(x+yz) g_i(x+yz) - f_i(x) g_i(x)$ so
+  that $z (\xi_1(x,y,z) + \xi_2(x,y,z)) = c - c = 0 \Rightarrow \xi_1(x,y,z) + \xi_2(x,y,z) = 0$.
+  Thus we may conclude $\det M(h,k,c) = 1$.
+  \qed
+\end{proof}
+\begin{remark}
+  For a more intuitive proof, one can assume that $R$ is an integral domain.
+  See \citep[Lemma 1.2, p. ~100]{lam06} for such a proof.
+  As Lam points out, and as is evident in the above proof, there is no need to assume that
+  $R$ is an integral domain, or even that $c$ is not a zero divisor.
+\end{remark}
+
+Suslin's lemma for $n=2$ now follows as a corollary: if $f=(f_1, f_2)$ is unimodular, then we obtain $c = 1 \in \langle f_1, f_2 \rangle \cap R$. By the above lemma, we obtain $f(h) \sim_{\SL_2(R[t])} f(h')$ for any $h,h' \in R[t]$.
+
+The rest of this section is devoted to proving Suslin's Lemma for the other cases as well, namely $n \geq 3$.
+
+\subsection{The extension $R \subset R[t]/\langle f \rangle$}
+\label{subsec:theextension}
+
+In this subsection, we let $f \in R[t]$ be a monic polynomial of degree $d$ over $R$.
+
+\emph{Let us denote $S = R[t]/\langle f \rangle$ in this section.}
+
+It is clear that $S$ is a finitely generated free $R$-module with basis $1, t, t^2, ..., t^{d-1} \in S$.
+For any $g \in S$, consider the map $\mu_g: S \rightarrow S$ defined by $\mu_g(h) = gh$.
+This is an $R$-linear map, and can therefore be represented by a $d \times d$ matrix with entries in $R$.
+Note then that $\det \mu_g \in R$.
+
+Therefore, the following "norm function" is well defined.
+
+\begin{definition}\label{def:norm}
+  $N_f: S \rightarrow R$ defined by $N_f(g) = \det \mu_g$.
+\end{definition}
+
+\begin{remark}
+  $N_f(g)$ is usually denoted as $\Res(f,g)$ and called the resultant of $f$ and $g$.
+  Note also that in the following sections, we will view $N_f$ as a map from $R[t]$ rather than $S$, in a natural way.
+  In this case, given $g,h\in R[t]$ such that $g - h \in \langle f \rangle$, we obtain $\mu_g = \mu_h$ and consequently $N_f(g) = N_f(h)$.
+\end{remark}
+
+\begin{proposition}
+\label{prop:matrixentries}
+  Let $I$ be an ideal of $R$.
+  Then if $g \in IS$, the matrix $M_g$ corresponding to $\mu_g$ has entries in $I$.
+\end{proposition}
+\begin{proof}
+  Write $g(t) = a_n t^n + \dots + a_0$ where $a_i \in I$.
+  Then we see that $M_g = a_n M_{t^n} + \dots + a_0 M_1$.
+  Thus $M_g$ has entries in $I$ since each $a_i$ is in $I$.
+  \qed
+\end{proof}
+
+The characteristic polynomial of $\mu_g$ will help us to prove things about the norm function.
+
+\begin{definition}
+  Let $g \in S$.
+  Then denote the matrix corresponding to $\mu_g$ by $M_g$.
+  We define $\chi_g (x) = \det (x \mathbb I - M_g) \in S[x]$.
+  We call $\chi_g$ the \emph{characteristic polynomial} corresponding to $g$.
+\end{definition}
+
+We summarize some important properties in the following proposition.
+
+\begin{proposition}
+\label{prop:charprops}
+  Let $I$ be an ideal of $R$ and let $g \in IS$.
+  Then $\chi_g(x)$ is monic of degree $d$, with constant coefficient equal to $(-1)^d N_f(g)$.
+  That is; $\chi_g(x) = t^d + a_{d-1}t^{d-1} + \dots + a_1 t + (-1)^d N_f(g)$.
+  We also have $N_f(g), a_1, \dots, a_{d-1} \in I$, and $\chi_g(g) = 0$.
+\end{proposition}
+\begin{proof}
+    The leading term of $\chi_g(x)$ clearly comes from the product of the
+    entries on the diagonal of $x \mathbb I - M_g$, which is $\prod_{i=1}^d (x - m_{ii}) = x^d + \dots$.
+    Thus we see that $\chi_g(x)$ is monic and has degree $d$.
+
+    The constant coefficient of $\chi_g(x)$ is $\chi_g(0) = \det (-M_g) = (-1)^d N_f(g)$.
+
+    Thus we can write $\chi_g(x) = t^d + a_{d-1}t^{d-1} + \dots + a_1 t + (-1)^d N_f(g)$.
+    
+    By proposition \ref{prop:matrixentries}, $M_g$ has entries in $I$.
+    Thus the off-diagonal entries  of $x \mathbb I - M_g$ are in $I$.
+    The off-diagonal entries of $x \mathbb I - M_g$ will divide terms in $\det (x \mathbb I - M_g)$ of strictly lower degree than $d$.
+    Therefore $N_f(g), a_1, \dots, a_{d-1} \in I$.
+    In order to prove $\chi_g(g) = 0$, we appeal to the Cayley-Hamilton theorem, which implies that $\chi_g(\mu_g) = 0$.
+    But $\chi_g(\mu_g) = \mu_{\chi_g(g)}$, so we obtain $\mu_{\chi_g(g)} = 0$.
+    This implies $\chi_g(g) = 0$.
+    \qed
+\end{proof}
+
+\begin{proposition}
+\label{prop:normprop}
+  Let $g$ be any element of $S$.
+  Then we have that $N_f(g) \in R \cap \langle g \rangle$.
+\end{proposition}
+\begin{proof}
+  By proposition \ref{prop:charprops}, we have $\chi_g(g) = g^d + a_{d-1} g^{d-1} + \dots + a_1 g + (-1)^d N_f(g) = 0$.
+  Thus $N_f(g) \in R \cap \langle g \rangle$.
+  \qed
+\end{proof}
+
+\begin{lemma}
+\label{lemma:cosetnorm}
+  Let $I \subset R$ be an ideal of $R$, and let $g \in IS$.
+  Then $N_f(1+g) \in 1 + I$.
+\end{lemma}
+\begin{proof}
+  Let $M_g$ be the matrix corresponding to $\mu_g$. The identity matrix corresponds to $\mu_1$.
+  Clearly $\mu_{1+g}$ is represented by $M_{1+g} = \mathbb I + M_g$.
+  By proposition \ref{prop:matrixentries}, all entries of $M_g$ are in $I$.
+  Thus we get $N_f(1+g) \equiv N_f(1) \equiv 1 \mod I$.
+  \qed
+\end{proof}
+
+\subsection{A non-constructive proof}
+\label{sec:suslin_nonconstructive}
+
+\begin{lemma}
+\label{lemma:cinif}
+  Let $f = (f_1, ..., f_n) \in R[t]^n$ and suppose that $\Gamma \in \EL_{n-1}(R[t])$
+  is such that $(g_2, ..., g_n) = (f_2, ..., f_n) \Gamma$ where there is $c \in \langle f_1, g_2 \rangle \cap R$.
+  Then $c \in I_f$.
+\end{lemma}
+\begin{proof}
+  We must show that if $h \equiv h' \mod \langle c \rangle [t]$, then $f(h) \sim f(h')$.
+  This is done in the following sequence of steps.
+  \[
+    \begin{matrix}
+      f(h) & \sim_{\EL_n} & (f_1(h) , g_2(h), g_3(h), \dots, g_n(h))    & \text{using $\Gamma$}              \\
+           & \sim_{\EL_n} & (f_1(h) , g_2(h), g_3(h'), \dots, g_n(h'))  & \text{by the derivation below}       \\
+           & \sim_{SL_n}& (f_1(h'), g_2(h'), g_3(h'), \dots, g_n(h')) & \text{using lemma \ref{lemma:suslinbasecase}, with $c$ as given}       \\
+           & \sim_{\EL_n} & (f_1(h'), f_2(h'), f_3(h'), \dots, f_n(h')) & \text{using $\Gamma$ again}       \\
+           & =          & f(h')                                     &  \\
+    \end{matrix}
+  \]
+
+  We now prove the second step.
+  It clearly follows if $g_i(h) - g_i(h') \in \langle f_1(h), g_2(h) \rangle$, for $3 \geq i \geq n$.
+  Begin by noting that $g_i(h) - g_i(h') \in \langle h - h'\rangle$ (using the general fact that $(x - y) | (x^n - y^n)$).
+  But by choice we have $h - h' \in \langle c \rangle[t]$, and furthermore we have that $c \in \langle f_1, g_2 \rangle$.
+  Putting these facts together we obtain $g_i(h) - g_i(h') \in \langle h - h' \rangle \subset \langle c \rangle [t] \subset \langle f_1(h), g_2(h) \rangle$.
+  \qed
+\end{proof}
+
+Note that the above proof is constructive.
+
+Now we can give a non-constructive proof of Suslin's lemma.
+By Nagata (lemma \ref{lemma:nagata}), we may assume that $f_1$ is monic without loss of generality.
+
+\begin{lemma}
+\label{lemma:suslinconcrete}
+  Suppose that $f \in \Um_n(R[t])$ is a unimodular row with $f_1$ monic and $n \geq 3$.
+  Then we have
+  \[
+    1 \in \langle N_{f_1}(((f_2, \dots, f_n) \Gamma)_1) \mid \Gamma \in \EL_{n-1}(R[t]) \rangle
+  \]
+\end{lemma}
+\begin{proof}
+  We give a proof by contradiction.
+  The contradiction to the hypothesis implies that $1 \notin L$
+  where $L = \langle N_{f_1}(((f_2, \dots, f_n) \Gamma)_1) \mid \Gamma \in \EL_{n-1}(R[t]) \rangle$.
+  Then there is some maximal ideal $\frak m \subset R$ of $R$ such that $L \subset \frak m$
+  Now note that $(R/\frak m)[t]$ is a euclidean domain.
+  Therefore, applying proposition \ref{prop:generaleuclid} to the last $n-1$ components, we see that there is $\overline \Gamma \in \EL_{n-1}((R/m)[t])$ such that
+  $((\overline f_2, \dots, \overline f_n) \overline \Gamma)_1 = \overline g$ where $\overline g = \gcd(\overline f_2, \dots, \overline f_n)$.
+  We have $\overline 1 \in \langle \overline f_1, \overline g \rangle$ in $(R/\frak m)[t]$.
+  Now lift $\overline \Gamma \in \EL_{n-1}((R/\frak m)[t])$ to some $\Delta \in \EL_{n-1}(R[t])$.
+  Concretely, we have $h_1 f_1 + h_2 g \in 1 + \frak m[t]$ where $g = ((f_2, \dots, f_n) \Delta)_1$.
+  Taking the norm with respect to $f_1$ and using lemma \ref{lemma:cosetnorm}, we obtain $N_{f_1}(h_2) N_{f_1}(g) \in 1 + \frak m$.
+  Therefore $N_{f_1}(g) \notin \frak m$. But of course $N_{f_1}(g) = N_{f_1}(( (f_2, \dots, f_n) \Delta)_1) \in L$ and so $L$ is not a subset of $\frak m$, which is our contradiction.
+  \qed
+\end{proof}
+
+This proof is non-constructive for two reasons; firstly it is a proof by contradiction, and secondly it asserts the existence of a maximal ideal, which requires Zorn's lemma in general.
+
+In the next section, we prove the above lemma in a fully constructive way, which can be implemented in Haskell.
+
+Using the above lemma, we can complete the proof of Suslin's lemma directly for the case $n \geq 3$ in a constructive way.
+
+\begin{lemma}[Suslin's lemma for $n \geq 3$]
+  Let $f = \Um_n(R[t])$, with $n \geq 3$ and $f_1$ monic.
+  Then $I_f = R$. In particular $f(t) \sim f(0)$.
+\end{lemma}
+\begin{proof}
+  By lemma \ref{lemma:suslinconcrete}, we can find $c_1, ..., c_m \in R$ and $\Gamma_1, ..., \Gamma_m \in \EL_{n-1}(R[t])$ such that
+  if we denote $g_j = ((f_2, ..., f_n) \Gamma_j)_1$ for $1 \leq j \leq m$, then
+
+  \[
+    1 = \sum_j c_j N_{f_1}(g_j)
+  \]
+
+  We complete the proof by showing that $N_{f_1}(g_j) \in I_f$ for $1 \leq j \leq m$.
+  But by proposition \ref{prop:normprop}, we have $N_{f_1}(g_j) \in \langle f_1, g_j \rangle \cap R$ for $1 \leq j \leq m$.
+  Therefore we may apply lemma \ref{lemma:cinif} to see that $N(g_j) \in I_f$.
+  Thus $I_f = R$ and thus $f(t) \sim f(0)$.
+  (Note that lemma \ref{lemma:cinif} is constructive.)
+  \qed
+\end{proof}

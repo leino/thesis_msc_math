@@ -1,0 +1,15 @@
+My thesis project for MSc in Mathematics, presented on November 2011.
+
+
+In the report, I write about the Quillen-Suslin theorem.
+Suslin gave an almost constructive proof of this.
+The non-constructive portion is contained in Lemma 5.10.
+This proof makes use of maximal ideals, which is not constructive in general.
+
+In the final chapter, a very general version of this lemma is proved constructively.
+
+In the 'code' subdirectory, there is also code corresponding to the constructive proof of Lemma 5.10.
+The implementation looks a lot like the non-constructive proof, thanks to it's use of the continuation monad.
+(The custom monad defined in 'DynamicIdeal.hs' allows you to pretend that you are working modulo a maximal ideal, and thus allows you to compute inverses. Behind the scenes, the "maximal ideal" keeps changing as you request inverses of elements. Thus I named it a "dynamic ideal". Feel free to criticize the name.)
+
+In the future, I plan to implement Quillen-Suslin fully.

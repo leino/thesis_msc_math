@@ -1,0 +1,293 @@
+\subsection{Outline}
+
+Our final task is to show that all finitely generated projective $k[t_1, \dots, t_n]$-modules are free.
+
+We will not quite accomplish that goal in this section, but we will find a concrete condition formulated in terms of matrices, which implies Quillen-Suslin.
+All later sections are then devoted to proving this condition constructively, and thus proving Quillen-Suslin.
+
+The steps taken in this section are the following.
+
+We will first relax the concept of freeness, by introducing the weaker concept of stable freeness.
+
+\begin{definition}
+\label{def:stablyfree}
+  An $R$ -module $P$ is \emph{stably free} if there are integers $m$ and $n$ such that $P \oplus R^m \cong R^n$.
+\end{definition}
+
+To make the following exposition a little less verbose, let us introduce the following notation, which will be used only in this section.
+
+\begin{notation}
+  The collection of free $R$-modules is denoted $\free(R)$, and the collection of stably free $R$-modules is denoted $\stablyfree(R)$
+\end{notation}
+
+Then we will show that if $M$ is a finitely generated, projective $k[t_1, \dots, t_n]$-module, then $M$ is stably free, that is; $\fgp(k[t_1, \dots, t_n]) \subset \stablyfree(k[t_1,\dots, t_n])$.
+
+The next step is to find a sufficient condition on $R$ such that $\fgp(R) \cap \stablyfree(R) \subset \free(R)$.
+
+Putting the above two conditions together for the case $R = k[t_1, \dots, t_n]$ we will obtain a concrete condition, implying Quillen-Suslin.
+
+\subsection{Characterizing stably free modules}
+
+We now give a characterization of stably free modules.
+Note that, since every stably free module is also projective, we are characterizing $\fgp(R) \cap \stablyfree(R)$.
+
+\begin{proposition}
+\label{prop:stablyfree_char}
+  $ P \in \stablyfree(R)$ iff there is a split short exact sequence of the form
+  
+  \[
+    0 \rightarrow P \rightarrow R^n \rightarrow R^m \rightarrow 0
+  \]
+
+  for some $m$, $n$.
+\end{proposition}
+\begin{proof}
+  $P$ is stably free, so there are integers $m$ and $n$ such that $R^n \cong P \oplus R^m$.
+  This is equivalent to the above short exact sequence splitting.
+  \qed
+\end{proof}
+
+We can reinterpret this in more computationally friendly terms.
+As we just saw, we have $P \in \stablyfree(R)$ iff $P \cong \ker(f: R^n \surjarrow R^m)$ where $f$ splits i.e. has a right inverse.
+In other words, such a $P$ is simply (isomorphic to) the kernel of some right invertible $m \times n$ matrix.
+
+\subsection{On the freeness of stably free modules}
+
+In this section, we characterize those $P \in \stablyfree(R)$ which are also free.
+Note that, since stably free modules are projective, we are characterizing free modules in $\fgp(R) \cap \stablyfree(R) = \stablyfree(R)$.
+
+\begin{proposition}
+  Suppose $P \cong \ker f$ where $f: R^n \surjarrow R^m$ is some split epimorphism.
+  ($\Leftrightarrow P \in \stablyfree(R)$).
+
+  Then $P$ is free iff there is some $r$ and some isomorphism $\hat f$ such that the following diagram commutes
+
+  \begin{displaymath}
+    \xymatrix{                         & R^m \oplus R^r \ar[d]^\pi \\
+         R^n \ar[r]_f \ar[ur]^{\hat f} & R^m                       \\ }
+  \end{displaymath}
+\end{proposition}
+\begin{proof}
+  Suppose $P$ is free. Then $g: P \isomarrow R^r$ for some r.
+  Also, since $f$ splits, there is an isomorphism $\varphi: R^m \oplus P \isomarrow R^n$ with $\ker \varphi = 0 \oplus P$.
+  Define $\hat \varphi: R^m \oplus P \rightarrow R^m \oplus R^r$ by $\hat \varphi(x,p) = (f \varphi(x,p), g(p) )$.
+  Clearly $\pi \hat \varphi = f \varphi$ so that $\pi \hat \varphi \varphi^{-1} = f$, i.e. we can take $\hat f = \hat \varphi \varphi^{-1}$.
+  Suppose instead that $\hat f$ and $r$ exists, such that the above diagram commutes.
+  We have $f = \pi \hat f$, so $P \cong \ker f = \ker (\pi \hat f) \cong \ker \pi = 0 \oplus R^r \cong R^r$.
+  \qed
+\end{proof}
+
+We can interpret this in terms of matrices, as follows.
+
+We have seen that $P \in \fgp(R) \cap \stablyfree(R)$ is simply the kernel of some right invertible $m \times n$ matrix $M_f$.
+Then the condition for freeness presented above is that there is an \emph{invertible} $(m+r) \times n$ matrix $M_{\hat f}$ such that $M_f = M_\pi M_{\hat f}$.
+Here the $m \times (m+r)$ matrix $M_\pi$ is the matrix projecting onto the first $m$ coordinates.
+
+Thus $M_f = M_\pi M_{\hat f}$ simply means that we can take the top $m$ rows of the invertible matrix $M_{\hat f}$ and obtain our original matrix $M_f$.
+
+However, it is better to think of it as saying that we can add rows onto $M_f$ until we get an invertible matrix $M_{\hat f}$.
+
+We have just shown the following interpretation.
+
+\begin{proposition}
+  Suppose that $P \in \fgp(R) \cap \stablyfree(R)$, so that $P$ is isomorphic to the kernel of some right-invertible matrix $M$.
+  Then $P$ is free iff we can obtain an invertible matrix by adding rows to $M$.
+\end{proposition}
+
+The above characterization only tells us if a single $P \in \fgp(R) \cap \stablyfree(R)$ is free.
+
+We are ultimately interested in a condition that says that \emph{every} $P \in \fgp(R) \cap \stablyfree(R)$ is free, i.e. to show $\fgp(R) \cap \stablyfree(R) \subset \free(R)$.
+
+A \emph{necessary} condition for this to be the case is that, in particular, any right invertible row can be completed to an invertible matrix by adding rows.
+
+This is also a \emph{sufficient} condition, since a matrix being right invertible implies that each of its rows must be right invertible.
+
+We have just shown the following theorem.
+
+\begin{theorem}
+\label{thm:quillensuslin_ringcondition}
+  $\fgp(R) \cap \stablyfree(R) \subset \free(R)$ iff every right invertible row vector with entries in $R$ can be completed to an invertible matrix.
+\end{theorem}
+
+In the next section, we will show that $\fgp(k[t_1, \dots, t_n]) \subset \stablyfree(k[t_1, \dots, t_n])$.
+Then the truth of the above theorem for $R=k[t_1,\dots,t_n]$ will imply Quillen-Suslin.
+
+Finally, we introduce a synonym for right invertible, which is common in the literature.
+
+\begin{definition}
+  A right invertible row vector over $R$ is called a \emph{unimodular row over $R$}.
+  The set of all such rows is denoted $\Um_n(R)$.
+\end{definition}
+
+\subsection{Finitely generated, projective $k[t_1, \dots, t_n]$-modules are stably free}
+
+The statement in the title is almost the Quillen-Suslin theorem.
+In light of theorem \ref{thm:quillensuslin_ringcondition}, the truth of this statement gives us a way to prove Quillen-Suslin in a very concrete way.
+
+We will see that the result follows from Hilbert's syzygy theorem.
+
+\begin{theorem}[Hilbert's syzygy theorem]
+\label{thm:hilbertsyzygy}
+  Let $M \in \fg(k[t_1, \dots, t_n])$.
+  Then there is an exact sequence
+
+  \[
+    0 \rightarrow F_n \rightarrow \dots \rightarrow F_0 \rightarrow M \rightarrow 0
+  \]
+
+  where the $F_i$ are all free and finitely generated.
+\end{theorem}
+
+For a proof, see for instance \citep[p.~208]{kunz85}.
+
+The exact sequence in Hilbert's syzygy theorem is called a \emph{finite free resolution} for $M$.
+
+\begin{proposition}
+\label{thm:fgppolyringfree}
+  Let $M$ be a projective module with a finite free resolution. Then $M$ is stably free.
+\end{proposition}
+\begin{proof}
+  We have
+  \[
+    0 \rightarrow F_n \overset{\phi_n} \rightarrow \dots \rightarrow F_0 \overset{\phi_0}\rightarrow M \rightarrow 0
+  \]
+  where each $F_i$ is free.
+  We will proceed by induction on $n$.
+  For $n = 0$ we are done, since in this case $M \cong F_0$ so that $M$ is free.
+  Now, consider $n > 0$.
+  Denoting $M_1 = F_1 / \ker{\phi_1}$, we have the following short exact sequence
+  \[
+    0 \rightarrow M_1 \overset{\overline{\phi_1}}\rightarrow F_0 \overset{\phi_0}\rightarrow M \rightarrow 0
+  \]
+
+  Since $M$ is projective we see by proposition \ref{prop:projchar} that $\phi_0$ splits.
+  Therefore $F_0 = M_1 \oplus M$. Thus we are done if we can show that $M_1$ is stably free.
+  But since $M_1$ is a summand of a free module, we see that $M_1$ is projective.
+  We also have the following exact sequence
+
+  \[
+    0 \rightarrow F_n \overset{\phi_n} \rightarrow \dots F_2 \overset{\phi_2}\rightarrow F_1 \rightarrow M_1 \rightarrow 0
+  \]
+
+  where again the last module, $M_1$, is projective.
+
+  By the induction hypothesis, we see that $M_1$ is stably free and so we are done.
+  \qed
+\end{proof}
+
+By Hilbert's syzygy theorem and the above proposition, we have trivially the following result.
+
+\begin{corollary}
+\label{cor:fgppolyringstablyfree}
+  $\fgp(k[t_1, \dots, t_n]) \subset \stablyfree(k[t_1, \dots, t_n])$
+\end{corollary}
+
+Using theorem \ref{thm:quillensuslin_ringcondition} and the above corollary, we obtain.
+
+\begin{corollary}\label{cor:quillensuslin_reduced}
+  Quillen-Suslin is true iff every unimodular row with entries in $k[t_1,\dots,t_n]$ can be completed
+  to an invertible matrix.
+\end{corollary}
+
+\subsection{A slightly different condition}
+\label{sec:a_slightly_different_condition}
+
+In the previous section, we reduced the proof of the Quillen-Suslin theorem to the
+problem of showing that any unimodular row over $k[t_1, \dots, t_n]$ can be completed to an invertible matrix (corollary \ref{cor:quillensuslin_reduced}).
+
+We will now reformulate this condition slightly, in preparation of the following sections.
+
+\begin{notation}
+  Let $\alpha,\beta \in R^n$ for some $n$.
+  Then we write $\alpha \sim \beta$ if there is $M \in \GL_n(R)$ such that $\alpha M = \beta$.
+  We write $\alpha \sim_G \beta$ if there is $M \in G$ such that $\alpha M = \beta$, where $G$ is some
+  subgroup of $\GL_n(R)$.
+\end{notation}
+
+\begin{proposition}
+$\alpha \sim_G (1,0,\dots,0)$ iff $\alpha$ can be completed to an element of $G$.
+\end{proposition}
+
+\begin{proof}
+
+\[
+  \Rightarrow
+\]
+
+Suppose $\alpha M = (1,0,\dots,0)$.
+Write
+\[
+  M^{-1}
+  =
+  \left(
+  \begin{array}{c}
+    \beta_1 \\
+    \vdots     \\
+    \beta_n \\
+  \end{array}
+  \right)
+\]
+
+Where the $\beta_1, \dots, \beta_n$ are rows of length $n$.
+Then let
+
+\[
+  M_\alpha
+  =
+  \left(
+  \begin{array}{c}
+    \alpha  \\
+    \beta_2 \\
+    \vdots  \\
+    \beta_n \\
+  \end{array}
+  \right)
+\]
+
+Then $M_\alpha M = \mathbb{I}_n$ and thus by uniqueness of inverse, we have $M_\alpha = M^{-1} \in G$.
+
+\[
+  \Leftarrow
+\]
+
+Using similar notation as above, suppose that
+
+\[
+  M_\alpha
+  =
+  \left(
+  \begin{array}{c}
+    \alpha  \\
+    \beta_2 \\
+    \vdots  \\
+    \beta_n \\
+  \end{array}
+  \right)
+  \in
+  G
+\]
+
+There is some $M_\alpha^{-1} \in G$ such that $M_\alpha M_\alpha^{-1} = \mathbb{I}_n$.
+This implies $\alpha M_\alpha^{-1} = (1,0,\dots,0)$.
+  \qed
+\end{proof}
+
+
+\begin{remark}
+  In light of corollary \ref{cor:quillensuslin_reduced} and the above proposition, we see that
+  the particular $G$ does not really matter since corollary \ref{cor:quillensuslin_reduced} states that the matrix by which our $\alpha \in \Um_n(R)$ is conjugate to $(1,0,\dots,0)$ need only be \emph{invertible},
+  i.e. an element of $\GL_n(R)$. Therefore we often write $\sim$ in place of $\sim_G$, and only remark on $G$ when we
+  find it worthwhile or interesting.
+\end{remark}
+
+For clarity and future reference, we now combine corollary \ref{cor:quillensuslin_reduced}, and the above proposition.
+
+\begin{corollary}
+\label{cor:quillen_suslin_concrete}
+  Quillen-Suslin is true iff for any $f \in \Um_n(k[t_1, \dots, t_m])$ we have $f \sim (1,0,\dots,0)$.
+\end{corollary}
+
+This is the most important result of this section.
+
+To summarize, a constructive proof of Quillen-Suslin amounts to an algorithm which, given a unimodular row $f$ over $k[t_1, \dots, t_m]$, produces an invertible matrix $G \in \GL_n(k[t_1, \dots, t_m])$ such that $fG = (1,0,\dots,0)$.
+

@@ -1,0 +1,74 @@
+In this section, we make the necessary definitions to state the Quillen-Suslin theorem, aka Serre's Problem or Serre's Conjecture \footnote{However, Serre objected to the latter name.}.
+We mostly follow the notation and exposition in \citep{lam06}.
+
+\begin{definition}
+\label{def:fingen_rmodule}
+  An $R$ -module $M$ is \emph{finitely generated} if there is $R^n \surjarrow M$, for some $n$.
+  For a fixed ring $R$, we denote the collection of finitely generated $R$-modules by $\fg(R)$.
+\end{definition}
+
+\begin{definition}
+\label{def:proj_rmodule}
+  An $R$ -module $P$ is \emph{projective} if there is some $R$-module $Q$ such that
+  $P \oplus Q$ is free.
+\end{definition}
+
+\begin{definition}
+\label{def:fingen_rmodule}
+  The collection of finitely generated, projective $R$-modules will be denoted by $\fgp(R)$.
+\end{definition}
+
+Here is an equivalent characterization.
+
+\begin{proposition}
+\label{prop:projchar}
+  An $R$-module $P$ is projective iff every $R$-epimorphism onto $P$ splits (i.e. has a right inverse).
+\end{proposition}
+\begin{proof}
+  Suppose that $P$ is projective and let $Q$ be some module such that $P \oplus Q$ is free.
+  Further, suppose that we have some $R$-epimorphism $M \overset \varphi \surjarrow P$, where $M$ is some $R$-module.
+  We have some free basis for $P\oplus Q$, and we denote its elements by $\{(p_i, q_i) | i \in I\}$.
+  Also we have the projection $\pi: P \oplus Q \surjarrow P$ defined by $\pi(p,q) = p$.
+  Since $\varphi$ is surjective, there are $m_i$ such that $\varphi(m_i) = p_i$ for all $i \in I$.
+  We define a map $\phi: P \oplus Q \rightarrow M$ by $\phi(p_i, q_i) = m_i$.
+  In this way we see that $\varphi \phi = \pi$.
+  But $\pi$ obviously splits (has a right inverse), and therefore, so does $\varphi$.
+
+  Conversely, suppose that every $R$-epimorphism onto $P$ splits.
+  Denote by $R^{(P)}$ the free $R$-module on the elements of $P$.
+  We have a canonical $R$-epimorphism $R^{(P)} \overset{\varphi}\surjarrow P$ which splits, by hypothesis.
+  Therefore $R^{(P)} \cong P \oplus \ker \varphi$ so $P$ is projective.
+  \qed
+\end{proof}
+
+The Quillen-Suslin theorem is
+
+\begin{theorem}[Quillen-Suslin]
+\label{thm:quillensuslin}
+  Let $k$ be a field and let $R = k[t_1, \dots, t_n]$.
+
+  Then every finitely generated, projective $R$-module is free.
+\end{theorem}
+
+Serre first posed the above theorem as a problem in \citep{serre55}.
+
+Using the notation introduced in section \ref{sec:notation}, we can state this more concisely as
+$\fgp(k[t_1, \dots, t_n]) \subset \free(k[t_1,\dots,t_n])$.
+
+In section \ref{sec:euclideancase} we will show $\fgp(R) \subset \free(R)$ for the case where $R$ is a euclidean domain. Since $k[t]$ is a euclidean domain, we will then have shown Quillen-Suslin for the case $n=1$.
+
+We will spend some time to obtain a more concrete form of theorem \ref{thm:quillensuslin}.
+In fact it can be reduced to the statement that every right-invertible row with entries in $k[t_1, \dots, t_n]$
+can be completed, by adding more rows, to an invertible matrix.
+This is the standard way to reduce the statement, and was shown by Serre in \citep{serre58}.
+We will, however, find it more convenient to work with the equivalent characterization in corollary \ref{cor:quillen_suslin_concrete}. It is shown in section \ref{sec:a_slightly_different_condition} that this is equivalent to the standard reduction mentioned above.
+
+
+
+In section \ref{sec:quillen_suslin_proof}, we give a short proof of Quillen-Suslin (in the reduced form of corollary \ref{cor:quillen_suslin_concrete}) by assuming Suslin's Lemma (lemma \ref{lemma:suslinslemma}).
+In section \ref{sec:suslins_lemma}, we prove Suslin's Lemma in an almost constructive way.
+The non-constructive part of the proof is contained in lemma \ref{lemma:suslinconcrete}.
+In section \ref{sec:lemma611_constructive_proof}, we give a constructive proof of lemma \ref{lemma:suslinconcrete}.
+This proof is implemented in the Haskell programming language in Appendix A.
+
+In the next section we will obtain a concrete condition on $R$ such that $\fgp(R) \subset \free(R)$ is true.

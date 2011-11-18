@@ -1,0 +1,131 @@
+\subsection{Outline}
+In this section we will put together a proof of the Quillen-Suslin theorem.
+More specifically, we will prove the condition given in corollary \ref{cor:quillen_suslin_concrete} for the particular case of $R = k[t_1, \dots, t_m]$.
+Namely that if we have a
+unimodular row $f = (f_1, \dots, f_n) \in \Um_n(k[t_1, \dots, t_m])$ then $f \sim (1,0,\dots,0)$.
+By the mentioned corollary, this implies Quillen-Suslin.
+
+Note that the following is a constructive argument, assuming Suslin's lemma.
+Suslin's Lemma will be proved in the sections following this one.
+
+\subsection{Proving Quillen-Suslin using Suslin's Lemma}
+
+We first state Suslin's Lemma.
+
+\begin{lemma}[Suslin's Lemma]\label{lemma:suslinslemma}
+  Let $R$ be a commutative ring and suppose $f \in \Um_n(R[t])$. 
+  Suppose further that either
+  \begin{itemize}
+    \item $n = 1,2$
+    \item $n \geq 3$ and $f$ has a monic component.
+  \end{itemize}
+  Then $f(t) \sim f(0)$.
+\end{lemma}
+
+As noted above, we will give the proof later, of course \emph{without using any of the results we derive from it here}.
+
+
+\begin{lemma}[Nagata]
+\label{lemma:nagata}
+  Let $f \in k[t_1,\dots,t_m]$.
+  Then there is an automorphism $\varphi: k[t_1,\dots,t_m] \rightarrow k[t_1,\dots,t_m]$ such that
+  $\varphi(f)$ is monic with respect to $t_1$.
+\end{lemma}
+
+This is a standard result.
+For instance, see \citep[p. ~103]{lam06} for a constructive proof.
+
+% the proof is commented out
+\begin{comment}
+\begin{proof}
+  We construct the automorphism explicitly by changing the variables.
+  We denote our initial guess by $\psi$:
+
+  \[
+    t_1 \xrightarrow[]{\psi} t_1
+  \]
+  \[
+    t_i \xrightarrow[]{\psi} t_i + t_1^{r_i}
+  \]
+
+  This is clearly an automorphism.
+  Now, $\psi$ acts on $f$ in the following way
+
+  If we denote
+
+  \[
+    f(t_1, \dots, t_m) = 
+    \sum_{I \in S}
+    a_{i_1, \dots, i_d}
+    t_1^{i_1} t_2^{i_2} \dots t_d^{i_d}
+  \]
+
+  (where $I$ are the d-tuples $(i_1, \dots, i_d)$ and $S$ is such that $a_I \neq 0$ for all $I \in S$.)
+
+  we get
+
+  \[
+    \psi f(t_1, \dots, t_d) =
+    f(t_1, t_2 + t_1^{r_2}, \dots, t_d + t_1^{r_d})
+    =
+    \sum_{i_1, \dots, i_d \geq 0}    
+    a_{i_1, \dots, i_d}
+    t_1^{i_1} (t_2 + t_1^{r_2})^{i_2} \dots (t_d + t_1^{r_d})^{i_d}
+    =
+  \]
+  \[
+    =
+    \sum_{i_1, \dots, i_d \geq 0}    
+    a_{i_1, \dots, i_d}
+    t_1^{i_1}
+    (t_1^{r_2 i_2 + \dots + r_d i_d} + h_{i_1, \dots, i_d})
+  \]
+
+  where the $h_{i_1, \dots, i_d}$ are polynomials with $\degree_{t_1} h_{i_1, \dots, i_d} < \sum_{j=2}^d r_j d_j$.
+  Therefore
+
+  \[
+    \psi f(t_1, \dots, t_d)
+    =
+    \sum_{i_1, \dots, i_d \geq 0}    
+    a_{i_1, \dots, i_d}
+    t_1^{i_1 + r_2 i_2 + \dots + r_d i_d}
+    +
+    h
+  \]
+
+  where the $t_1$-degree of $h$ is strictly smaller than that of the sum.
+  Assuming that the sum is not zero, we are done if we set $\varphi = \psi / \lc_{t_1}(\psi f_1)$.
+  To ensure this, we simply pick the $r_2, \dots, r_j$ so that the numbers $i_1 + r_2 i_2 + \dots + r_d i_d$ are all distinct.
+  This is easy to do: choose $m > \max(i_j | i \in S, 1 \leq j \leq d)$, which is defined since $S$ is finite.
+  Then we may take $r_j = m^j$. Then the $i_1 + r_2 i_2 + \dots + r_d i_d$ are simply expansions of distinct
+  $d$-tuples $(i_1, \dots, i_d)$ ($d$-digit numbers) in an $m$-ary number system, and are therefore distinct.
+  \qed
+\end{proof}
+ \end{comment}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+By Nagata and Suslin's lemma, we have the following corollary.
+
+\begin{corollary}\label{cor:suslinscorollary}
+  Let $R = k[t_1, \dots, t_m]$ and $f \in \Um_n(R[t])$.
+  Then $f(t) \sim f(0)$
+\end{corollary}
+
+\begin{theorem}
+  Let $f \in \Um_n(k[t_1, \dots, t_m])$. Then $f \sim (1,0,\dots,0)$.
+\end{theorem}
+\begin{proof}
+  We proceed by induction on $m$.
+  The base case, $m=1$, has already been taken care of.
+  (This is the case of a euclidean domain, and so we are done by corollary \ref{cor:quillensuslin_euclidean}.)
+
+  To take the induction step, we use the above corollary.
+  \qed
+\end{proof}
+
+We have now proved Quillen-Suslin using Suslin's Lemma.
+The remainder of this paper is devoted to proving Suslin's Lemma.

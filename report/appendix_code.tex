@@ -1,0 +1,143 @@
+
+
+\subsection{Invertible.hs}
+
+This is a module for representing rows that are invertible modulo some ideal $(a_1,\dots,a_m)$.
+An invertible row consists of the row itself $f$, its inverse $g$ (a column matrix) and witnesses $h$ of the fact that
+such that $fg = 1 + (a_1, \dots, a_m) h$.
+We represent $f$, $g$ and $h$ by three lists:
+
+\begin{code}
+module Invertible where
+
+import Algebra.Structures.Ring
+
+data Ring r => Invertible r = Invertible [r] [r] [r]
+
+\end{code}
+
+\subsection{Transformed.hs}
+
+\begin{code}
+module Transformed where
+
+import Algebra.Structures.IntegralDomain
+import Algebra.Matrix
+import Invertible
+import MatrixAux
+
+data Ring r => Transformed r =
+  Transformed (Invertible r) (Matrix r) [[r]]
+
+elementary :: IntegralDomain r =>
+  r -> Int -> Int -> Transformed r -> Transformed r
+elementary q i j (Transformed (Invertible fs gs hs) t hss) =
+  let (m,m') = (elemM n q i j, elemM n (neg q) i j) where n = length fs in
+  Transformed (Invertible (fs `rmulmat` m) (m' `matmulc` gs) hs)
+              (t`mulM`m) (hss `mmulmat` m)
+
+switch :: IntegralDomain r =>
+  Int -> Int -> Transformed r -> Transformed r
+switch i j
+  | i == j = id
+  | otherwise = elementary one i j .
+                elementary (neg one) j i .
+                elementary one i j
+\end{code}
+
+\subsection{DynamicIdeal.hs}
+
+\begin{code}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+
+module DynamicIdeal where
+
+import Control.Monad.Cont
+import Control.Monad.State
+import Algebra.Structures.Ring
+import Invertible
+import MatrixAux
+
+runDynamicIdealT (DynamicIdealT prog) invert = do
+  evalStateT (runContT prog invert) []
+
+newtype DynamicIdealT r m a =
+  DynamicIdealT (ContT (Invertible r) (StateT [r] m) a)
+  deriving (Functor, Monad, MonadState [r])
+
+decide :: (Monad m, Ring r) =>
+  r -> DynamicIdealT r m (Either [r] (Invertible r))
+decide a = 
+  DynamicIdealT $ ContT $ \k -> do
+    as <- get
+    let n = length as
+    put $ as ++ [a]
+    (Invertible xs ys zs'z) <- k $ Left $ basis (length$a:as) (length as)
+    let (zs,z) = (init zs'z, last zs'z)    
+    put $ as ++ xs
+    (Invertible us vs wsts) <- k $ Right $ Invertible [neg z] [a]
+                                             (zs ++ map neg ys)
+    let (ws,ts) = splitAt n wsts
+    put $ as
+    return $ Invertible (xs ++ us) ((map neg ts) ++ vs) ws
+
+\end{code}
+
+\subsection{Suslin.hs}
+
+\begin{code}
+module Suslin where
+
+import Control.Monad.State
+import Control.Monad.Writer
+import Algebra.Structures.CommutativeRing
+import Algebra.UPoly
+import Algebra.Matrix
+import Algebra.TypeChar.Char
+import DynamicIdeal
+import Invertible
+import Transformed
+import UPolyAux
+import MatrixAux
+
+
+shed ws dfs (Transformed (Invertible fs gs hs) t hss) = do
+  as <- fmap (map liftCoeff) get
+  let dhss = (map liftCoeff ws) `ctensorr` dfs
+  return $ Transformed (Invertible (fs`rsub`(as`rmulm`dhss))
+                       gs (hs`ucsub`(dhss`mmulc`gs))) t (hss`umadd`dhss)
+
+cancel i b row@(Transformed (Invertible fs _ _) _ _) =
+  foldr1 (.) [elementary (neg (b<*>(lC f))*>(t<^>((deg f)-(deg$fs!!i))))
+                         i j
+             |(f,j) <- zip fs [0 ..], f/=zero, j/=i] row
+
+leaf mon r@(Transformed (Invertible fs gs hs) gamma hss) = do
+  as <- get
+  tell [gamma]
+  let (y,x,ws) = (norm mon (head fs), norm mon (head gs),
+                  normWitnesses mon one as hs)
+      ws' = normWitnesses mon (head fs) as (hss `mmulc` (basis (length fs) 0))
+  return$Invertible [y<+>(as`apply`ws')] [x] (ws`cadd`(x`scalec`ws'))
+
+suslin row@(Transformed (Invertible fs _ _) _ _) = do
+  let (d,i) = minimum [(deg f,i) | (f,i) <- zip fs [0 ..], f /= zero]
+      n = length fs
+  if (length$filter (/= zero) fs) == 1
+    then return$switch i 0 row
+    else do
+      ad <- decide$lC$fs!!i
+      case ad of
+        Left ws -> shed ws ((t<^>d)`scaler`(basis n i)) row >>= suslin
+        Right (Invertible [b] _ ws) ->
+          (return$cancel i b row) >>=
+            shed ws [if j/=i then neg$lT f else zero
+                    |(f,j)<-zip fs [0 ..]] >>= suslin
+
+runSuslin mon fs gs =
+  let n = length fs in
+  runWriter $ runDynamicIdealT (suslin (Transformed (Invertible fs gs [])
+                                 (identity n) [replicate n zero]))
+                               (leaf mon)
+  
+\end{code}

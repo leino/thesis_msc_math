@@ -1,0 +1,30 @@
+In this section, we prove the Quillen-Suslin theorem in the case where $n=1$ so that the base ring $R=k[t]$ is a euclidean domain.
+The proof basically reduces to the euclidean algorithm.
+This result will be used to give the general proof later on.
+
+\begin{proposition}
+\label{prop:generaleuclid}
+  Let $R$ be a euclidean domain and let $\alpha = (a_1, \dots, a_n) \in R^n$.
+  Then $\alpha \sim_G (g,0,\dots,0)$ where $G = \EL_n(R)$ and $g = \gcd(a_1, \dots, a_n)$.
+\end{proposition}
+\begin{proof}
+  We can apply the ordinary euclidean algorithm to $(a_1, \dots, a_n)$, which is just a sequence
+  of elementary transformations transforming $(a_1, \dots, a_n)$ into $(g,0,\dots,0)$.
+  The product of these elementary transformations is an element in $\Gamma \in \EL_n(R)$ such
+  that $(a_1, \dots, a_n) \Gamma = (g, 0 \dots, 0)$.
+  \qed
+\end{proof}
+
+\begin{corollary}
+\label{cor:quillensuslin_euclidean}
+  Let $R$ be a euclidean domain and let $\alpha = (a_1, \dots, a_n) \in \Um_n(R)$.
+  Then $\alpha \sim_G (1,0,\dots,0)$ where $G = \EL_n(R)$.
+\end{corollary}
+\begin{proof}
+  The fact that $\alpha$ is unimodular implies that $\gcd(a_1, \dots, a_n)$ is a unit.
+  Thus, by proposition $\ref{prop:generaleuclid}$, there is $\Gamma \in \EL_n(R)$ such that
+  $\alpha \Gamma = (1, 0, \dots, 0)$.
+  \qed
+\end{proof}
+
+By corollary \ref{cor:quillensuslin_reduced}, this implies Quillen-Suslin for the case $n=1$.
