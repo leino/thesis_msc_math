@@ -10,6 +10,9 @@ In the final chapter, a very general version of this lemma is proved constructiv
 
 In the 'code' subdirectory, there is also code corresponding to the constructive proof of Lemma 5.10.
 The implementation looks a lot like the non-constructive proof, thanks to it's use of the continuation monad.
-(The custom monad defined in 'DynamicIdeal.hs' allows you to pretend that you are working modulo a maximal ideal, and thus allows you to compute inverses. Behind the scenes, the "maximal ideal" keeps changing as you request inverses of elements. Thus I named it a "dynamic ideal". Feel free to criticize the name.)
+
+(The custom monad defined in 'DynamicIdeal.hs' allows you to pretend that you are working modulo a maximal ideal,
+and thus allows you to compute inverses. Behind the scenes, the "maximal ideal" keeps changing as you request
+inverses of elements. Thus I named it a "dynamic ideal". Feel free to criticize the name.)
 
 In the future, I plan to implement Quillen-Suslin fully.
